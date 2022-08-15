@@ -21,7 +21,7 @@ def deployContract(fromWallet):
 
     # max fee can not be bigger than priority fee and 9 zeros in order to get 1gwei from wei so 1000000000wei = 1gwei
     if type(Contract) == brownie.network.contract.ProjectContract:
-        print("CONGRATULIEREN ! Contract deployed.")
+        print("CONGRATULIEREN ! Contract deployed")
     else:
         print("UH OH ! Something went wrong.")
     return Contract
