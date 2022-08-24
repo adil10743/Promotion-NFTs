@@ -1,8 +1,8 @@
-from brownie import network, accounts, config, contract
+from brownie import network, accounts, config, coPromotionNFT
 import brownie
 from scripts.automation_scripts import get_account
 from web3 import Web3
-
+#ganache-cli --fork https://goerli.infura.io/v3/9a683af859ec496e9cad16fbd65e61b1 
 max_fee = 20000000000
 priority_fee = 1500000000
 
@@ -14,9 +14,10 @@ priority_fee = 1500000000
 def deployContract(fromWallet):
     account = get_account(fromWallet)
     print("Account retrieved, back in deploy. Deploying contract...")
-    Contract = contract.deploy(
+    Contract = coPromotionNFT.deploy(
 
         {"from": account, "max_fee": max_fee, "priority_fee": priority_fee},
+        publish_source=config["networks"][network.show_active()].get("verify")
     )
 
     # max fee can not be bigger than priority fee and 9 zeros in order to get 1gwei from wei so 1000000000wei = 1gwei
