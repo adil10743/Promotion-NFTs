@@ -16,12 +16,15 @@ contract coPromotionNFT is ERC721 {
      constructor () ERC721("coPromotionNFT", "CNFT") {  
      }
 
+     function unsafe_inc(uint x) private pure returns (uint) {
+          unchecked { return x + 1; }
+     }
+
      //front end function that given a list of tokenURIs gives out a group of randomly created hashes
      //code = web3.utils.randomHex(32)
-     //hash = web3.utils.soliditySha3(code)
      function createMintCodes(bytes32[] memory hashes, string[] memory tokenURIs) public {
           require(hashes.length == tokenURIs.length, "Inputs must be of the same length");
-          for (uint256 i = 0; i < hashes.length; i++) {
+          for (uint256 i = 0; i < hashes.length; i = unsafe_inc(i)) {
                _mintCodes[hashes[i]] = tokenURIs[i];
           }
      }
