@@ -11,9 +11,11 @@ contract coPromotionNFT is ERC721 {
      uint256 public tokenCounter;
 
     // Mapping from hashcode to tokenURI
-    mapping(bytes32 => string) private _mintCodes;
+    mapping(uint8 => string) public _tokenURIs;
+    mapping(bytes32 => uint8) private _mintCodes;
      
      constructor () ERC721("coPromotionNFT", "CNFT") {  
+          _tokenURIs[1] = "CEO Token";
      }
 
      function unsafe_inc(uint x) private pure returns (uint) {
@@ -22,15 +24,15 @@ contract coPromotionNFT is ERC721 {
 
      //front end function that given a list of tokenURIs gives out a group of randomly created hashes
      //code = web3.utils.randomHex(32)
-     function createMintCodes(bytes32[] memory hashes, string[] memory tokenURIs) public {
-          require(hashes.length == tokenURIs.length, "Inputs must be of the same length");
+     function createMintCodes(bytes32[] memory hashes, uint8[] memory tokenType) public {
+          require(hashes.length == tokenType.length, "Inputs must be of the same length");
           for (uint256 i = 0; i < hashes.length; i = unsafe_inc(i)) {
-               _mintCodes[hashes[i]] = tokenURIs[i];
+               _mintCodes[hashes[i]] = tokenType[i];
           }
      }
 
      function isValidCode(bytes32 hash) private view returns (bool) {
-          if (StringUtils.equal(_mintCodes[hash],"")) {
+          if (_mintCodes[hash] == 0) {
                return false;
           }
           return true;
@@ -47,7 +49,7 @@ contract coPromotionNFT is ERC721 {
           uint256 newTokenId = tokenCounter;
           _safeMint(_msgSender(), newTokenId);
           tokenCounter += 1;
-          //set tokenURI = _mintCodes[hash]
+          //set tokenURI = _tokenURIs[_mintCodes[hash]]
           delete _mintCodes[hash];
           return newTokenId;
      }
